@@ -1,3 +1,4 @@
+// src/App.jsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Dashboard from './components/Dashboard';
@@ -8,8 +9,8 @@ function App() {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    setToken(storedToken);
+    const stored = localStorage.getItem('token');
+    if (stored) setToken(stored);
   }, []);
 
   return (
