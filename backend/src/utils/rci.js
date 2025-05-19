@@ -1,16 +1,36 @@
-export const rciMap = {
-  "PHQ-9": { dp: 5.2, alfa: 0.89, media: 6.1 },
-  "GAD-7": { dp: 4.8, alfa: 0.91, media: 5.6 },
-  "DASS-21": { dp: 13.4, alfa: 0.90, media: 19.3 }
-};
+// rci.js
+import { psychometrics } from "./psychometrics.js";
 
-export const calcRCI = (pre, post, dp, alfa) => {
-  const sem = dp * Math.sqrt(1 - alfa);
+export const calcRCI = (pre, post, dp, alpha) => {
+  const sem = dp * Math.sqrt(1 - alpha);
   const diff = post - pre;
   const rci = diff / (sem * Math.sqrt(2));
   return {
     rci: rci.toFixed(2),
     confiavel: Math.abs(rci) >= 1.96
   };
+};
+
+export const getPsychometricData = (scale) => {
+  const base = psychometrics[scale];
+  if (!base) return null;
+
+  if (base.mean && base.std && base.alpha) {
+    return {
+      mean: base.mean,
+      std: base.std,
+      alpha: base.alpha
+    };
+  }
+
+  if (base.FP) {
+    return {
+      mean: base.FP.mean,
+      std: base.FP.std,
+      alpha: base.FP.alpha
+    };
+  }
+
+  return null;
 };
 

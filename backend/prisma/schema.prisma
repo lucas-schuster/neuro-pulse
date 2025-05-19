@@ -8,20 +8,20 @@ datasource db {
 }
 
 model Therapist {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
   clients   Client[]
-  sessions  Session[]
+  sessions  Session[] @relation("TherapistSessions")
 }
 
 model Client {
-  id          String   @id @default(uuid())
-  code        String   @unique
+  id          String    @id @default(uuid())
+  code        String    @unique
   therapist   Therapist @relation(fields: [therapistId], references: [id])
   therapistId String
-  sessions    Session[]
+  sessions    Session[] @relation("ClientSessions")
 }
 
 model Session {
@@ -29,14 +29,18 @@ model Session {
   clientId    String
   therapistId String
   scale       String
+
+  client      Client    @relation("ClientSessions", fields: [clientId], references: [id])
+  therapist   Therapist @relation("TherapistSessions", fields: [therapistId], references: [id])
   response    SurveyResponse?
 }
 
 model SurveyResponse {
-  id            String   @id @default(uuid())
-  sessionId     String   @unique
-  scale_id      String
+  id         String   @id @default(uuid())
+  sessionId  String   @unique
+  session    Session  @relation(fields: [sessionId], references: [id])
+  scale_id   String
   resposta_json Json
-  created_at    DateTime @default(now())
+  created_at DateTime @default(now())
 }
 

@@ -10,13 +10,17 @@ import resultsRoutes from './routes/resultsRoutes.js';
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/survey', surveyRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/results', resultsRoutes);
+
+
 
 const PORT = process.env.PORT || 3333;
 app.listen(PORT, () => {
